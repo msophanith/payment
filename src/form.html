@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wing Payment Provider</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css"
+    />
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Wing Payment Provider</h1>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <h1 class="title">Wing</h1>
+        <p>Onetime payment flow</p>
+        <form
+          id="frm"
+          action="https://cashier-demo.master.ssn.digital/v1/charge/onetime/646f02f47f573d001ec79fec:1*invoice-api.master.sabay.com"
+          method="post"
+        >
+          <input
+            type="hidden"
+            id="hash"
+            name="hash"
+            value="808075fe502b6a3d3d2120d562ac1ee56db1ce74ac92de2e370dbf3fdae37374"
+          />
+          <input
+            type="hidden"
+            id="signature"
+            name="signature"
+            value="7773a32d6bbeaeb8c869ed27352dbe4f0a15662441418dc07cf18816c505418ad84cdefc149f4e4ec6a62885ecb7560d9e1760e78d90a23f1bd81e59d1e46d0e"
+          />
+          <input
+            type="hidden"
+            id="public_key"
+            name="public_key"
+            value="GDON5JFY23ECJOVYNV6BW7A675VFT25BNWIYG5TEFPZYGVAUMOXEBDOK"
+          />
+          <input
+            type="hidden"
+            id="payment_address"
+            name="payment_address"
+            value="646f02f47f573d001ec79fec:1*invoice-api.master.sabay.com"
+          />
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+      ​
+    </section>
+  </body>
+</html>
