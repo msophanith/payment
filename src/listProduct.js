@@ -18,7 +18,7 @@ import {
   Flex,
   Avatar,
   Box,
-  Select
+  Select,
 } from "@chakra-ui/react";
 import { Helmet } from "react-helmet";
 import axios from "axios";
@@ -154,23 +154,22 @@ const ListProduct = () => {
   const [isSelected, setIsSelected] = useState(false);
   const [paymentProvider, setPaymentProvider] = useState({
     name: "",
-    id: ""
+    id: "",
   });
   const [type, setType] = useState("One Time");
   const [script, setScript] = useState();
   const [getListProduct, { data, loading }] = useLazyQuery(GET_LIST_PRODUCT);
-  const [getProductById, { data: reloadData }] = useLazyQuery(
-    GET_PRODUCT_BY_ID
-  );
+  const [getProductById, { data: reloadData }] =
+    useLazyQuery(GET_PRODUCT_BY_ID);
   const [getPsp, { data: pspData }] = useLazyQuery(PSP_FOR_PRODUCt);
   const [checkoutPspDetailForPayment, { data: checkoutData }] = useLazyQuery(
-    CHECKOUT_PSP_DETAIL_FOR_PAYMENT
+    CHECKOUT_PSP_DETAIL_FOR_PAYMENT,
   );
   const [inVoiceCreatePayment, { data: invoiceData }] = useMutation(
-    INVOCIE_CREATE_PAYMENT
+    INVOCIE_CREATE_PAYMENT,
   );
   const [invoiceCreateInvoice, { data: invoiceCreateData }] = useMutation(
-    INVOICE_CREATE_INVOICE
+    INVOICE_CREATE_INVOICE,
   );
 
   useEffect(() => {
@@ -182,22 +181,22 @@ const ListProduct = () => {
             type === "One Time"
               ? "60d57c4f957fec00196647cc"
               : "6215bc92301fe60e6053c3dd",
-          isActive: true
-        }
-      }
+          isActive: true,
+        },
+      },
     });
   }, [getListProduct, type]);
 
   const onClickItem = async (id) => {
     await getProductById({
       variables: {
-        id: id
-      }
+        id: id,
+      },
     });
     await getPsp({
       variables: {
-        productId: id
-      }
+        productId: id,
+      },
     });
     setexpand(true);
   };
@@ -213,7 +212,7 @@ const ListProduct = () => {
               setIsSelected(true);
               setPaymentProvider({
                 id: item.id,
-                name: item.name
+                name: item.name,
               });
             }}
             key={i}
@@ -241,7 +240,7 @@ const ListProduct = () => {
         type: "user_top_up",
         value: null,
         service_provider: "mysabay_user",
-        user_id: 39555923
+        user_id: 39555923,
       };
       const input = {
         amount: reloadData?.store_getProductById?.salePrice,
@@ -252,12 +251,12 @@ const ListProduct = () => {
         ssnTxHash: "",
         paymentProvider: paymentProvider.name,
         items: [{ itemId: reloadData?.store_getProductById?.id, quantity: 1 }],
-        info: JSON.stringify(info)
+        info: JSON.stringify(info),
       };
       inVoiceCreatePayment({
         variables: {
-          input: input
-        }
+          input: input,
+        },
       })
         .then(async ({ data, errors }) => {
           if (data?.invoice_createPaymentReference) {
@@ -265,8 +264,8 @@ const ListProduct = () => {
             await checkoutPspDetailForPayment({
               variables: {
                 id: paymentProvider.id,
-                paymentAddress: paymentAddress
-              }
+                paymentAddress: paymentAddress,
+              },
             });
           } else if (errors) {
             alert(errors);
@@ -282,7 +281,7 @@ const ListProduct = () => {
         value: null,
         service_provider: null,
         user_id: 39555923,
-        game_id: "acc_tester"
+        game_id: "acc_tester",
       };
       const input = {
         amount: parseFloat(reloadData?.store_getProductById?.salePrice),
@@ -296,27 +295,27 @@ const ListProduct = () => {
           {
             itemId: reloadData?.store_getProductById?.id,
             quantity: 1,
-            displayName: reloadData?.store_getProductById?.name
-          }
+            displayName: reloadData?.store_getProductById?.name,
+          },
         ],
-        info: JSON.stringify(info)
+        info: JSON.stringify(info),
       };
       invoiceCreateInvoice({
         variables: {
-          input: input
-        }
+          input: input,
+        },
       }).then(async ({ data, errors }) => {
         if (data?.invoice_createInvoice?.invoice) {
           const sabayWalletPaymentAddress = `${
             data?.invoice_createInvoice?.invoice?.id
           }:2*invoice-api.master.sabay.com?req_time=${Math.ceil(
-            new Date().getTime() / 1000
+            new Date().getTime() / 1000,
           )}`;
           await checkoutPspDetailForPayment({
             variables: {
               id: paymentProvider.id,
-              paymentAddress: sabayWalletPaymentAddress
-            }
+              paymentAddress: sabayWalletPaymentAddress,
+            },
           });
         } else if (errors) {
           alert(errors);
@@ -329,7 +328,7 @@ const ListProduct = () => {
     paymentProvider,
     checkoutPspDetailForPayment,
     type,
-    invoiceCreateInvoice
+    invoiceCreateInvoice,
   ]);
 
   const serializeData = function (obj) {
@@ -346,7 +345,7 @@ const ListProduct = () => {
     const paymentAddress = `${
       invoiceCreateData?.invoice_createInvoice?.invoice?.id
     }:2*invoice-api.master.sabay.com?req_time=${Math.ceil(
-      new Date().getTime() / 1000
+      new Date().getTime() / 1000,
     )}`;
     if (
       checkoutData?.checkout_getPaymentServiceProviderDetailForPayment &&
@@ -355,12 +354,12 @@ const ListProduct = () => {
       const sabayWalletReqUrl = `https://pp.master.mysabay.com/v1/charge/auth/${
         invoiceCreateData?.invoice_createInvoice?.invoice?.id
       }:2*invoice-api.master.sabay.com?req_time=${Math.ceil(
-        new Date().getTime() / 1000
+        new Date().getTime() / 1000,
       )}`;
       const offGamerWalletReqUrl = `https://offgamer-coin.master.mysabay.com/v1/charge/auth/${
         invoiceCreateData?.invoice_createInvoice?.invoice?.id
       }:2*invoice-api.master.sabay.com?req_time=${Math.ceil(
-        new Date().getTime() / 1000
+        new Date().getTime() / 1000,
       )}`;
       axios
         .post(
@@ -368,9 +367,8 @@ const ListProduct = () => {
             ? offGamerWalletReqUrl
             : sabayWalletReqUrl,
           serializeData({
-            hash:
-              checkoutData?.checkout_getPaymentServiceProviderDetailForPayment
-                ?.hash,
+            hash: checkoutData
+              ?.checkout_getPaymentServiceProviderDetailForPayment?.hash,
             signature:
               checkoutData?.checkout_getPaymentServiceProviderDetailForPayment
                 ?.signature,
@@ -378,16 +376,14 @@ const ListProduct = () => {
               checkoutData?.checkout_getPaymentServiceProviderDetailForPayment
                 ?.publicKey,
             payment_address: paymentAddress,
-            com_service_code: "jx2"
+            com_service_code: "jx2",
           }),
           {
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
               "service-code": "mysabay_user",
-              Authorization:
-                "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiMzUzMTY5MWItZjhiMy00Nzg5LTg0ZDQtN2Y3MDRmMTMzNTQ5IiwiYXBwX2lkIjoibXlzYWJheV91c2VyIiwiZnJvbSI6bnVsbCwiYXVkIjoidXNlciIsInRva2VuX2lkIjoiODA3ZGYyYTktNTZlNi00ZWUzLWE4NzAtOTBjMzA3NTgzZDJhIiwibXlzYWJheV91c2VyX2lkIjozOTU1NTkyMywiZW1haWxfdmVyaWZpZWQiOjEsInBob25lX3ZlcmlmaWVkIjoxLCJ1c2VybmFtZSI6ImFjY190ZXN0ZXIiLCJkaXNwbGF5X25hbWUiOiIgIiwiaWF0IjoxNjg1NDE4MjQwLCJleHAiOjE2ODU0NjE0NDB9.tKge1gNCNXXqGdmZZqYm4B_LVzXIcGUbXDc8O3yqtEaBSYI2ASiMqLOxesjDvUMKk8rhIptvUptwr-N98w0nnQpme4E7r2TyxziCn7t2-jjqm1013QCYWuFRYMvIllE9Z5lGystZ4uV7c1GrUJNtv7LNDDSKlBwjARV11UJvKzzUidRln7P1_tt-l1U0y55j55U-GG291auje72xHx9yTFcAfJWATYqqb-pgB1iz68REkD5nT-5zHUIn_cAMVMijP79O2xwJaA32KagrmaXReVsXxO4KVC8irnR3J6vuxjIMPQI7fxsuohQDMO4WdfQrr4VtSEan4W38b3Esf1mOmv3SenJ4medD-A-olxSeoMcndyFBcAz-0bqu-2Ih5AP3clGomxema7bsxOM3oTeYgIDGxyQCphMXGsq_yfMgRvC818ozUYKhfVwR_Whq6J47MaiOnM-xUgSBREkH1EQQBlVnJSL-kXxtBnGSF0JjkeYVaT16tbg8tcch5WvJ9l7zpY96Cj8Rk6WyiUIb_XgUWHFGQpIn2uv49jOpU19pQSZ79AJvCiqb2q_WpxpnZsHsY88cxSbF6u2pusUFMtsTo9EO3aC2Q66Wd7TdZq51RZ9a4aTD3A9H_3sSpPtY6hldqDvW_CLxHuQdH9qzTMMyU_qC1ClAYg0I4-Gq4y-yI4w"
-            }
-          }
+            },
+          },
         )
         .then(function (response) {
           console.log(response);
@@ -556,7 +552,7 @@ const ListProduct = () => {
                     <ListItem key={i}>
                       {extractPaymentProvider(item?.providers)}
                     </ListItem>
-                  )
+                  ),
                 )}
               </List>
             </CardBody>
